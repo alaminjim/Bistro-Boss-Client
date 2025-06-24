@@ -72,12 +72,14 @@ const NavBar = () => {
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
         <div className="navbar-end">
-          <div className="mr-4 mt-2">
-            <BsCart4 className="w-6 h-6"></BsCart4>{" "}
-            <div className="-mt-[39px] ml-2 pr-2 pl-2  absolute bg-gray-300 text-black rounded-full">
-              {cart?.length}
+          <Link to="/dashboard/cart">
+            <div className="mr-4 mt-2">
+              <BsCart4 className="w-6 h-6"></BsCart4>{" "}
+              <div className="-mt-[39px] ml-2 pr-2 pl-2  absolute bg-gray-300 text-black rounded-full">
+                {cart?.length}
+              </div>
             </div>
-          </div>
+          </Link>
           {user ? (
             <>
               <button
