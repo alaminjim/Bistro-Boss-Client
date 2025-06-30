@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProviders";
 import toast from "react-hot-toast";
+import SocialLogin from "../Social/SocialLogin";
 
 const Login = () => {
   const { loginUser } = useContext(AuthContext);
@@ -37,8 +38,7 @@ const Login = () => {
         setDisabled(true);
       })
       .catch((err) => {
-        toast.error("Login failed");
-        console.log(err);
+        toast.error(err.message);
       });
   };
 
@@ -53,7 +53,7 @@ const Login = () => {
   return (
     <div className="my-28">
       <div className="login hero bg-base-200 min-h-screen">
-        <div className="hero-content flex w-[1000px] h-[492px] shadow-lg">
+        <div className="hero-content flex w-[1000px] h-[530px] shadow-lg">
           <div className="text-center lg:text-left">
             <img src={login} alt="" />
           </div>
@@ -65,13 +65,13 @@ const Login = () => {
                 <input
                   type="email"
                   name="email"
-                  className="input"
+                  className="input w-full"
                   placeholder="Email"
                 />
                 <label className="label">Password</label>
                 <input
                   type="password"
-                  className="input"
+                  className="input w-full"
                   name="password"
                   placeholder="Password"
                 />
@@ -80,7 +80,7 @@ const Login = () => {
                 <input
                   onBlur={handleCaptcha}
                   type="text"
-                  className="input"
+                  className="input w-full"
                   name="captcha"
                   placeholder="Captcha"
                 />
@@ -93,6 +93,8 @@ const Login = () => {
                 >
                   Login
                 </button>
+                <div className="divider">OR</div>
+                <SocialLogin></SocialLogin>
                 <p className="text-orange-500 text-center">
                   New here? Create a New Account{" "}
                   <Link to="/signup">

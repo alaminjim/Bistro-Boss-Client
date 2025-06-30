@@ -9,6 +9,15 @@ import PrivateRoutes from "./PrivateRoutes";
 import ContactUs from "../Pages/ContactUs/ContactUs";
 import Dashboard from "../Layouts/Dashboard";
 import Cart from "../Pages/Dashboard/Cart";
+import AllUsers from "../Pages/Dashboard/AllUsers";
+import AddItems from "../Pages/Dashboard/AddItems";
+import AdminRoute from "./adminRoute";
+import ManageItems from "../Pages/Dashboard/ManageItems";
+import UpdateItems from "../Pages/Dashboard/UpdateItems";
+import Payment from "../Pages/Dashboard/Payment/Payment";
+import PaymentHistory from "../Pages/Dashboard/Payment/PaymentHistory";
+import AdminHome from "../Pages/Dashboard/AdminHome";
+import UserHome from "../Pages/Dashboard/UserHome";
 
 const router = createBrowserRouter([
   {
@@ -43,11 +52,68 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard></Dashboard>,
+    element: (
+      <PrivateRoutes>
+        <Dashboard></Dashboard>
+      </PrivateRoutes>
+    ),
     children: [
+      // only users
+      {
+        path: "/dashboard/home",
+        element: <UserHome></UserHome>,
+      },
       {
         path: "/dashboard/cart",
         element: <Cart></Cart>,
+      },
+      {
+        path: "/dashboard/payment",
+        element: <Payment></Payment>,
+      },
+      {
+        path: "/dashboard/payment-history",
+        element: <PaymentHistory></PaymentHistory>,
+      },
+
+      // admin user
+      {
+        path: "/dashboard/admin-home",
+        element: (
+          <AdminRoute>
+            <AdminHome></AdminHome>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/dashboard/users",
+        element: <AllUsers></AllUsers>,
+      },
+      {
+        path: "/dashboard/add-items",
+        element: (
+          <AdminRoute>
+            <AddItems></AddItems>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/dashboard/items",
+        element: (
+          <AdminRoute>
+            <ManageItems></ManageItems>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "/dashboard/updateItem/:id",
+        element: (
+          <AdminRoute>
+            <UpdateItems></UpdateItems>
+          </AdminRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/menu/${params.id}`),
       },
     ],
   },

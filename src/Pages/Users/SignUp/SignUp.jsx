@@ -5,8 +5,11 @@ import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../../../Providers/AuthProviders";
 import toast from "react-hot-toast";
+import useUserPublic from "../../../Hooks/useUserPublic";
+import SocialLogin from "../Social/SocialLogin";
 
 const SignUp = () => {
+  const userPublic = useUserPublic();
   const navigate = useNavigate();
   const {
     register,
@@ -17,11 +20,25 @@ const SignUp = () => {
   const { createUser, profileUpdate } = useContext(AuthContext);
 
   const onSubmit = (data) => {
-    console.log(data);
     createUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
-        profileUpdate(data.name, data.photo)
+        profileUpdate(data.name, data.photo);
+
+        const userInfo = {
+          name: data.name,
+          email: data.email,
+          photo: data.photo,
+        };
+
+        userPublic
+          .post("/users", userInfo)
+          .then((res) => {
+            if (res.data.insertedId) {
+              console.log("data added to database successful");
+            }
+          })
+
           .then(() => {})
           .catch((err) => {
             console.log(err);
@@ -39,7 +56,7 @@ const SignUp = () => {
   return (
     <div className="my-28">
       <div className="signUp hero bg-base-200 min-h-screen">
-        <div className="hero-content flex-row-reverse w-[1000px] h-[492px] shadow-lg">
+        <div className="hero-content flex-row-reverse w-[1000px] h-[530px] shadow-lg">
           <div className="text-center lg:text-left">
             <img src={signUp} alt="" />
           </div>
@@ -51,7 +68,7 @@ const SignUp = () => {
                 <input
                   type="text"
                   name="name"
-                  className="input"
+                  className="input w-full"
                   placeholder="Name"
                   {...register("name")}
                 />
@@ -59,14 +76,14 @@ const SignUp = () => {
                 <input
                   type="url"
                   name="photo"
-                  className="input"
+                  className="input w-full"
                   placeholder="PhotoURL"
                   {...register("photo")}
                 />
                 <label className="label">Email</label>
                 <input
                   type="email"
-                  className="input"
+                  className="input w-full"
                   name="email"
                   placeholder="Email"
                   {...register("email")}
@@ -75,7 +92,7 @@ const SignUp = () => {
                 <label className="label">Password</label>
                 <input
                   type="password"
-                  className="input"
+                  className="input w-full"
                   name="password"
                   placeholder="Password"
                   {...register("password", {
@@ -107,6 +124,8 @@ const SignUp = () => {
                   type="submit"
                   value="Sign Up"
                 />
+                <div className="divider">OR</div>
+                <SocialLogin></SocialLogin>
                 <p className="text-orange-500 text-center">
                   Already registered? Go to log in
                   <Link to="/login">
